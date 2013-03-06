@@ -1,0 +1,13 @@
+h2 Reset Password
+p
+  Set a new password.
+
+form(action='/reset', method='post', 'data-autosave' => 'true')
+  fieldset
+    ul
+      li
+        label
+          span Password
+          input(name='user[password]', value='', placeholder='******', type='password')
+      li
+        input(type='submit', name='submit', value='Set Password')

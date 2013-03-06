@@ -1,0 +1,9 @@
+!!! 5
+html
+  head
+    title SinatraAuth
+  body
+    - if flash[:notice]
+      .notice= flash[:notice]
+    .content
+      = yield

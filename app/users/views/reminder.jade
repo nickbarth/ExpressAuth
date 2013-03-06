@@ -1,0 +1,13 @@
+h2 Reset Password
+p
+  Send yourself an email to reset your password.
+
+form(action='/reminder', method='post', 'data-autosave' => 'true')
+  fieldset
+    ul
+      li
+        label
+          span Email
+          input(name='user[email]', value='', placeholder='me@example.com', type='text')
+      li
+        input(type='submit', name='submit', value='Reset Password')

@@ -1,0 +1,17 @@
+h2 Login
+p
+  Welcome back.
+
+form(action='/login', method='post')
+  fieldset
+    ul
+      li
+        label
+          span Email
+          input(name='user[email]', value='', placeholder='me@example.com', type='text')
+      li
+        label
+          span Password
+          input(name='user[password]', value='', placeholder='******', type='password')
+      li
+        input(type='submit', name='submit', value='Login')

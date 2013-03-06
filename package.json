@@ -1,0 +1,18 @@
+{
+  "name": "NodeAuth",
+  "version": "0.0.0",
+  "description": "Demo application for user authentication in Node.",
+  "main": "app.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "mongoose": "3.x.x"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": "",
+  "author": "Nick Barth",
+  "license": "MIT"
+}
