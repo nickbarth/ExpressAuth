@@ -1,15 +1,16 @@
 var mongoose = require('mongoose'),
     bcrypt = require('bcrypt'),
-    Schema = mongoose.Schema,
     UserSchema = null,
     User = null;
 
 /* User Schema */
-UserSchema = new Schema({
+UserSchema = mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, unique: true },
   salt: { type: String, required: true },
-  hash: { type: String, required: true }
+  hash: { type: String, required: true },
+  resetToken: { type: String, required: true },
+  resetTime: { type: Date, required: true }
 });
 
 /* Properties */
@@ -40,15 +41,37 @@ UserSchema.methods.verifyPassword = (function (password, callback) {
   bcrypt.compare(password, this.hash, callback);
 });
 
+// Updates a users reset token and time.
+//
+// callback
+//
+// Returns and calls callback when saved.
+UserSchema.methods.updateReset = (function (callback) {
+  this.resetToken = escape(bcrypt.genSaltSync(5));
+  this.resetTime = (new Date());
+  this.save(function () {
+    return callback();
+  });
+});
+
+/* User Static Methods */
+
 // Registers a new user.
 //
+// name - Set as new users name.
 // email - Set as new users email.
 // password - Set as new users password.
 // callback
 //
 // Returns callback with either the new user or false if there wan an error.
-UserSchema.statics.register = (function (email, password, callback) {
-  var user = new User({ email: email, password: password });
+UserSchema.statics.register = (function (name, email, password, callback) {
+  var user = new User({
+    name: name,
+    email: email,
+    password: password,
+    resetToken: escape(bcrypt.genSaltSync(5)),
+    resetTime: (new Date())
+  });
   user.save(function (err) {
     if (err) {
       return callback(false);
@@ -76,22 +99,22 @@ UserSchema.statics.authenticate = (function (email, password, callback) {
   });
 });
 
-/* User Class Methods */
-
 // Finds a user users by reset and password.
 //
 // email - Used to lookup user
-// reset_token - Also used to lookup user.
+// resetToken - Also used to lookup user.
 // callback
 //
 // Returns callback with the found user or false if the user is not found or
 // their reset token has expired.
-UserSchema.statics.find_by_reset = (function (email, reset_token, callback) {
-  this.findOne({ email: email, reset_token: reset_token }, function (err, user) {
-    var fiveMinutesAgo = (function () { return ((new Date())*5*60000); });
+UserSchema.statics.findByReset = (function (email, resetToken, callback) {
+  this.findOne({ email: email, resetToken: resetToken }, function (err, user) {
+    var fiveMinutesAgo = (function () { return ((new Date())-5*60000); });
     if (err || !user) return callback(false);
-    if (user.reset_time > fiveMinutesAgo()) {
-      return callback(user);
+    if (user.resetTime > fiveMinutesAgo()) {
+      user.updateReset(function () {
+        return callback(user);
+      });
     } else {
       return callback(false);
     }
@@ -99,3 +122,4 @@ UserSchema.statics.find_by_reset = (function (email, reset_token, callback) {
 });
 
 User = mongoose.model('User', UserSchema);
+module.exports = User;
