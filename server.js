@@ -1,9 +1,7 @@
 var express = require('express'),
-  mongoose = require('mongoose'),
-  app = express();
+    app = express();
 
-
-app.configure(function(){
+app.configure(function () {
   app.set('views', __dirname + '/app/users/views');
   app.set('view engine', 'jade');
   app.use(express.bodyParser());
@@ -14,4 +12,5 @@ app.configure(function(){
 });
 
 require('./app/users/routes')(app);
-app.listen(3000);
+
+module.exports = app;

@@ -1,7 +1,6 @@
 var mongoose = require('mongoose'),
     User = require('../../models/users');
 
-
 describe('User', function () {
   var currentUser = null;
 
