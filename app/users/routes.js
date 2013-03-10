@@ -1,10 +1,8 @@
 var api = require('./controller');
 
-module.exports = UserRoutes = function (app) {
+module.exports = UserRoutes = (function (app) {
   /* Helpers */
-  app.dynamicHelpers({
-    currentUser: api.helpers.currentUser
-  });
+  app.use(api.helpers.currentUser);
 
   /* Routes */
   app.get('/', api.home);
@@ -21,5 +19,3 @@ module.exports = UserRoutes = function (app) {
   app.post('/reminder', api.postReminder);
   app.post('/reset', api.postReset);
 });
-
-require('./app/user/routes')(app);
