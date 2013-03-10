@@ -54,6 +54,23 @@ UserSchema.methods.updateReset = (function (callback) {
   });
 });
 
+// Updates a users name, email, and password.
+//
+// name - Set as users name.
+// email - Set as users email.
+// password - Set as users password.
+// callback
+//
+// Returns and calls callback when saved.
+UserSchema.methods.updateSettings = (function (name, email, password, callback) {
+  this.name = name || this.name;
+  this.email = email || this.email;
+  this.password = password || this.password;
+  this.save(function (err) {
+    return callback();
+  });
+});
+
 /* User Static Methods */
 
 // Registers a new user.
