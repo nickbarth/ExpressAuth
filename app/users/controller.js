@@ -2,23 +2,15 @@ var User = require('../../models/users');
 
 module.exports = UserAPI = {
   helpers: {
-    // Get the current user from session.
+    // Check user is authenticated
     //
-    // Returns the current user or false if no session.
-    currentUser: (function (req, res, next) {
-      if (req.session.userId !== undefined) {
+    // Returns an error if not signed in, otherwise it sets the currentUser.
+    checkAuth: (function (req, res, next) {
+      if (!req.session.userId) {
+        res.send('Please login to access this page.');
+      } else {
         res.locals.currentUser = User.findById(req.session.userId);
-      }
-      next();
-    }),
-
-    // ASDFDSAF
-    //
-    // ASDfadsfdf
-    flashMessage: (function (req, res, next) {
-      if (req.session.message !== undefined) {
-        res.locals.message = req.session.message;
-        req.session.message = undefined;
+        next();
       }
     })
   },
@@ -41,7 +33,7 @@ module.exports = UserAPI = {
   // get '/logout'
   getLogout: function (req, res) {
     req.session.destroy();
-    req.flash('info', 'Successfully logged out');
+    res.locals.flash = 'Successfully logged out.';
     res.redirect('/');
   },
 
@@ -73,12 +65,11 @@ module.exports = UserAPI = {
   postJoin: function (req, res) {
     User.register(req.body.name, req.body.email, req.body.password, function (user) {
       if (user) {
+        res.locals.flash = 'Thank you for becoming a member.';
         req.session.userId = user.id;
-        req.session.message = 'Thank you for becoming a member.';
         res.redirect('/members');
       } else {
         res.send('Invalid email or password.');
-        // res.redirect('/join');
       }
     });
   },
@@ -88,11 +79,10 @@ module.exports = UserAPI = {
     User.authenticate(req.body.email, req.body.password, function (user) {
       if (user) {
         req.session.userId = user.id;
-        req.session.message = 'Successfully logged in.';
+        req.locals.flash = 'Successfully logged in.';
         res.redirect('/members');
       } else {
-        req.send('Invalid email or password.');
-        // res.redirect('/login');
+        res.send('Invalid email or password.');
       }
     });
   },
@@ -100,7 +90,7 @@ module.exports = UserAPI = {
   // post '/members/account'
   postMembersAccount: function (req, res) {
     currentUser.updateSettings(req.body.name, req.body.email, req.body.password, function () {
-      req.flash('info', 'Your settings have been updated.');
+      res.locals.flash = 'Your settings have been updated.';
       res.redirect('/members');
     });
   },
@@ -112,7 +102,7 @@ module.exports = UserAPI = {
         user.updateReset();
         // Email User
       }
-      req.flash('info', 'Your password reset email has been sent.');
+      res.locals.flash = 'Your password reset email has been sent.';
       res.redirect('/reminder');
     });
   },
@@ -121,7 +111,7 @@ module.exports = UserAPI = {
   postReset: function (req, res) {
     User.updateSettings('', '', req.body.password, function (user) {
       if (user) {
-        req.flash('info', 'Password successfully updated.');
+        res.locals.flash = 'Password successfully updated.';
         res.redirect('/members');
       }
     });

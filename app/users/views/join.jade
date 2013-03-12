@@ -1,15 +1,18 @@
-h2 Join
-p Create an account.
+extends layout
 
-form(action='/join', method='post')
-  fieldset
-    label
-      span Name
-      input(name='name', value='', placeholder='Full Name', type='text')
-    label
-      span Email
-      input(name='email', value='', placeholder='me@example.com', type='text')
-    label
-      span Password
-      input(name='password', value='', placeholder='******', type='password')
-    input(type='submit', name='submit', value='Join')
+block mainContent
+  h2 Join
+  p Create an account.
+
+  form(action='/join', method='post')
+    fieldset
+      label
+        span Name
+        input(name='name', value='', placeholder='Full Name', type='text')
+      label
+        span Email
+        input(name='email', value='', placeholder='me@example.com', type='text')
+      label
+        span Password
+        input(name='password', value='', placeholder='******', type='password')
+      input(type='submit', name='submit', value='Join')

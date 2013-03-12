@@ -1,14 +1,184 @@
 var request = require('supertest'),
-    app = require('../../server.js');
+    superagent = require('superagent'),
+    agent = superagent.agent(),
+    mongoose = require('mongoose'),
+    app = require('../../server');
 
 describe('User Controller', function () {
+  // Saves a login cookie for pages which require authentication.
+  //
+  // Returns an nothing if successful, otherwise an error is thrown.
+  before(function (done) {
+    request(app).post('/join').send({ name: 'john doe', email: 'john.doe@example.com', password: 'password' }).end(function (err, res) {
+      if (err) return done(err);
+      agent.saveCookies(res);
+      done();
+    });
+  }); // End Before
+
+  // Cleans the user database after all tests have completed.
+  //
+  // Returns an nothing if successful, otherwise an error is thrown.
+  after(function (done) {
+    mongoose.connection.collections.users.drop(function(err) {
+      if (err) return done(err);
+      done();
+    });
+  }); // End After
+
   describe('GET /', function () {
-    it('displays the home page.', function (done) {
+    it('displays the home page', function (done) {
       request(app).get('/').expect(200).end(function (err, res) {
         if (err) return done(err);
-        res.text.should.equal("<h1>ExpressAuth</h1>")
+        res.text.should.include('<h2>Home</h2>');
         done();
       });
     });
-  }); // End Get '/'
+  }); // End GET /
+
+  describe('GET /join', function () {
+    it('displays the join page', function (done) {
+      request(app).get('/join').expect(200).end(function (err, res) {
+        if (err) return done(err);
+        res.text.should.include('<h2>Join</h2>');
+        done();
+      });
+    });
+  }); // End GET /join
+
+  describe('GET /login', function () {
+    it('displays the login page', function (done) {
+      request(app).get('/login').expect(200).end(function (err, res) {
+        if (err) return done(err);
+        res.text.should.include('<h2>Login</h2>');
+        done();
+      });
+    });
+  }); // End GET /login
+
+  describe('GET /logout', function () {
+    it('redirects to home page', function (done) {
+      request(app).get('/logout').expect(302).end(function (err, res) {
+        if (err) return done(err);
+        res.headers.location.should.equal('/');
+        done();
+      });
+    });
+  }); // End GET /logout
+
+  describe('GET /members', function () {
+    it('displays the members page', function (done) {
+      var req = request(app).get('/members');
+      agent.attachCookies(req);
+
+      req.expect(200).end(function (err, res) {
+        if (err) return done(err);
+        res.text.should.include('<h2>Members</h2>');
+        done();
+      });
+    });
+
+    it('displays an error if not logged in', function (done) {
+      request(app).get('/members').expect(200).end(function (err, res) {
+        if (err) return done(err);
+        res.text.should.include('Please login to access this page.');
+        done();
+      });
+    });
+  }); // End GET /members
+
+  describe('GET /members/account', function () {
+    it('displays the account page', function (done) {
+      var req = request(app).get('/members/account');
+      agent.attachCookies(req);
+
+      req.expect(200).end(function (err, res) {
+        if (err) return done(err);
+        res.text.should.include('<h2>Account</h2>');
+        done();
+      });
+    });
+
+    it('displays an error if not logged in', function (done) {
+      request(app).get('/members/account').expect(200).end(function (err, res) {
+        if (err) return done(err);
+        res.text.should.include('Please login to access this page.');
+        done();
+      });
+    });
+  }); // End GET /members/account
+
+  describe('GET /reminder', function () {
+    it('displays the reminder page', function (done) {
+      request(app).get('/reminder').expect(200).end(function (err, res) {
+        if (err) return done(err);
+        res.text.should.include('<h2>Password Reminder</h2>');
+        done();
+      });
+    });
+  }); // End GET /reminder
+
+  describe('GET /reset/:email/:resetToken', function () {
+    it.skip('displays the reset page', function (done) {
+      request(app).get('/reset/:email/:resetToken').expect(200).end(function (err, res) {
+        if (err) return done(err);
+        res.text.should.equal('<h2>Reset Password</h2>');
+        done();
+      });
+    });
+  }); // End GET /reset/:email/:resetToken
+
+  /*
+  describe('POST /join', function () {
+    it('displays the reset page', function (done) {
+      request(app).get('/reset').expect(200).end(function (err, res) {
+        if (err) return done(err);
+        res.text.should.equal('<h1>ExpressAuth</h1>');
+        done();
+      });
+    });
+  }); // End POST /join
+
+  describe('POST /login', function () {
+    it('displays the reset page', function (done) {
+      request(app).get('/login').expect(200).end(function (err, res) {
+        if (err) return done(err);
+        res.text.should.equal('<h1>ExpressAuth</h1>');
+        done();
+      });
+    });
+  }); // End POST /login
+
+  describe('POST /members/account', function () {
+    it('displays the reset page', function (done) {
+      request(app).get('/members/account').expect(200).end(function (err, res) {
+        if (err) return done(err);
+        res.text.should.equal('<h1>ExpressAuth</h1>');
+        done();
+      });
+    });
+  }); // End POST /members/account
+
+  describe('POST /reminder', function () {
+    it('displays the reset page', function (done) {
+      request(app).get('/reminder').expect(200).end(function (err, res) {
+        if (err) return done(err);
+        res.text.should.equal('<h1>ExpressAuth</h1>');
+        done();
+      });
+    });
+  }); // End POST /reminder
+
+  describe('POST /reset', function () {
+    it('displays the reset page', function (done) {
+      request(app).get('/reset').expect(200).end(function (err, res) {
+        if (err) return done(err);
+        res.text.should.equal('<h1>ExpressAuth</h1>');
+        done();
+      });
+    });
+  });
+
+  */
+
 }); // End User Controller

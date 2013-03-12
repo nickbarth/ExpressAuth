@@ -1,9 +1,8 @@
 !!! 5
 html
   head
-    title SinatraAuth
+    title ExpressAuth
   body
-    - if flash[:notice]
-      .notice= flash[:notice]
-    .content
-      = yield
+    if typeof(flash) !== 'undefined'
+      div= flash
+    block mainContent

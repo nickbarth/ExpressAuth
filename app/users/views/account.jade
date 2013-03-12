@@ -1,17 +1,16 @@
-h2 Account
-p
-  Update your settings.
+extends layout
 
-form(action='/members/account', method='post')
-  fieldset
-    ul
-      li
-        label
-          span Email
-          input(name='user[email]', value=current_user.email, placeholder='me@example.com', type='text')
-      li
-        label
-          span Password
-          input(name='user[password]', value='', placeholder='******', type='password')
-      li
-        input(type='submit', name='submit', value='Update Settings')
+block mainContent
+  h2 Account
+  p
+    Update your settings.
+
+  form(action='/members/account', method='post')
+    fieldset
+      label
+        span Email
+        input(name='user[email]', value=currentUser.email, placeholder='me@example.com', type='text')
+      label
+        span Password
+        input(name='user[password]', value='', placeholder='******', type='password')
+      input(type='submit', name='submit', value='Update Settings')
