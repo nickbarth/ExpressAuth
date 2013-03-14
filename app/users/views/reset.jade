@@ -5,9 +5,9 @@ block mainContent
   p
     Set a new password.
 
-  form(action='/reset', method='post', 'data-autosave' => 'true')
+  form(action='/reset', method='post', 'data-autosave'='true')
     fieldset
       label
         span Password
-        input(name='user[password]', value='', placeholder='******', type='password')
+        input(name='password', value='', placeholder='******', type='password')
       input(type='submit', name='submit', value='Set Password')

@@ -2,17 +2,26 @@ var request = require('supertest'),
     superagent = require('superagent'),
     agent = superagent.agent(),
     mongoose = require('mongoose'),
+    User = require('../../models/users');
     app = require('../../server');
 
+mongoose.connect('mongodb://localhost/tddauth-test', {db: { safe: true }});
+
 describe('User Controller', function () {
-  // Saves a login cookie for pages which require authentication.
+  var currentUser = null;
+
+  // Saves a login cookie for pages which require authentication and the current user.
   //
   // Returns an nothing if successful, otherwise an error is thrown.
   before(function (done) {
     request(app).post('/join').send({ name: 'john doe', email: 'john.doe@example.com', password: 'password' }).end(function (err, res) {
       if (err) return done(err);
-      agent.saveCookies(res);
-      done();
+      User.findOne({ email: 'john.doe@example.com' }, function (err, user) {
+        if (err) return done(err);
+        agent.saveCookies(res);
+        currentUser = user;
+        done();
+      });
     });
   }); // End Before
 
@@ -20,7 +29,7 @@ describe('User Controller', function () {
   //
   // Returns an nothing if successful, otherwise an error is thrown.
   after(function (done) {
-    mongoose.connection.collections.users.drop(function(err) {
+    User.remove({}, function (err) {
       if (err) return done(err);
       done();
     });
@@ -119,41 +128,69 @@ describe('User Controller', function () {
   }); // End GET /reminder
 
   describe('GET /reset/:email/:resetToken', function () {
-    it.skip('displays the reset page', function (done) {
-      request(app).get('/reset/:email/:resetToken').expect(200).end(function (err, res) {
+    it('displays the reset page', function (done) {
+      request(app).get('/reset/'+currentUser.email+'/'+currentUser.resetToken).expect(200).end(function (err, res) {
         if (err) return done(err);
-        res.text.should.equal('<h2>Reset Password</h2>');
+        res.text.should.include('<h2>Reset Password</h2>');
         done();
       });
     });
   }); // End GET /reset/:email/:resetToken
 
-  /*
   describe('POST /join', function () {
-    it('displays the reset page', function (done) {
-      request(app).get('/reset').expect(200).end(function (err, res) {
+    it('redirects to members page on success', function (done) {
+      var req = request(app).post('/join').send({ name: 'jane doe', email: 'jane.doe@example.com', password: 'password' });
+
+      req.end(function (err, res) {
         if (err) return done(err);
-        res.text.should.equal('<h1>ExpressAuth</h1>');
+        res.headers.location.should.equal('/members');
+        done();
+      });
+    });
+
+    it('displays error on invalid entry', function (done) {
+      var req = request(app).post('/join').send({ name: 'john doe', email: 'john.doe@example.com', password: 'password' });
+
+      req.end(function (err, res) {
+        if (err) return done(err);
+        res.text.should.include('Invalid email or password.');
         done();
       });
     });
   }); // End POST /join
 
   describe('POST /login', function () {
-    it('displays the reset page', function (done) {
-      request(app).get('/login').expect(200).end(function (err, res) {
+    it('redirects to members page on success', function (done) {
+      var req = request(app).post('/login').send({ email: 'john.doe@example.com', password: 'password' });
+
+      req.end(function (err, res) {
         if (err) return done(err);
-        res.text.should.equal('<h1>ExpressAuth</h1>');
+        res.headers.location.should.equal('/members');
+        done();
+      });
+    });
+
+    it('displays error on invalid login', function (done) {
+      var req = request(app).post('/login').send({ name: 'jim doe', email: 'jim.doe@example.com', password: 'password' });
+
+      req.end(function (err, res) {
+        if (err) return done(err);
+        res.text.should.include('Invalid email or password.');
         done();
       });
     });
   }); // End POST /login
 
   describe('POST /members/account', function () {
-    it('displays the reset page', function (done) {
-      request(app).get('/members/account').expect(200).end(function (err, res) {
+    it('updates user information', function (done) {
+      var req = request(app).post('/members/account');
+      agent.attachCookies(req);
+      req.send({ email: 'jim.doe@example.com', password: 'password' });
+
+      req.end(function (err, res) {
         if (err) return done(err);
-        res.text.should.equal('<h1>ExpressAuth</h1>');
+        res.text.should.include('<h2>Account</h2>');
+        res.text.should.include('jim.doe@example.com');
         done();
       });
     });
@@ -161,9 +198,9 @@ describe('User Controller', function () {
 
   describe('POST /reminder', function () {
     it('displays the reset page', function (done) {
-      request(app).get('/reminder').expect(200).end(function (err, res) {
+      var req = request(app).post('/reminder').send({ name: 'jim doe', email: 'jim.doe@example.com' }).end(function (err, res) {
         if (err) return done(err);
-        res.text.should.equal('<h1>ExpressAuth</h1>');
+        res.text.should.include('Your password reset email has been sent.');
         done();
       });
     });
@@ -171,14 +208,14 @@ describe('User Controller', function () {
 
   describe('POST /reset', function () {
     it('displays the reset page', function (done) {
-      request(app).get('/reset').expect(200).end(function (err, res) {
+      var req = request(app).post('/reset');
+      agent.attachCookies(req);
+
+      req.send({ password: 'newpassword' }).end(function (err, res) {
         if (err) return done(err);
-        res.text.should.equal('<h1>ExpressAuth</h1>');
+        res.headers.location.should.equal('/account');
         done();
       });
     });
-  });
-
-  */
-
+  }); // End POST /reset
 }); // End User Controller

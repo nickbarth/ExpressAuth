@@ -12,7 +12,7 @@ module.exports = UserRoutes = (function (app) {
   app.get('/reset/:email/:resetToken', api.getReset);
   app.post('/join', api.postJoin);
   app.post('/login', api.postLogin);
-  app.post('/members/account', api.postMembersAccount);
+  app.post('/members/account', api.helpers.checkAuth, api.postMembersAccount);
   app.post('/reminder', api.postReminder);
-  app.post('/reset', api.postReset);
+  app.post('/reset', api.helpers.checkAuth, api.postReset);
 });
