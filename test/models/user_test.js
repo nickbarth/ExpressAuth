@@ -1,6 +1,8 @@
 var mongoose = require('mongoose'),
     User = require('../../models/users');
 
+mongoose.connect('mongodb://localhost/tddauth-test', {db: { safe: true }});
+
 describe('User', function () {
   var currentUser = null;
 

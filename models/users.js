@@ -1,5 +1,6 @@
 var mongoose = require('mongoose'),
     bcrypt = require('bcrypt'),
+    crypto = require('crypto'),
     UserSchema = null,
     User = null;
 
@@ -14,11 +15,6 @@ UserSchema = mongoose.Schema({
 });
 
 /* Properties */
-
-// Id Property
-UserSchema.virtual('id').get(function () {
-  return this._id.toHexString();
-});
 
 // Password Property
 UserSchema.virtual('password').get(function (password) {
@@ -47,7 +43,7 @@ UserSchema.methods.verifyPassword = (function (password, callback) {
 //
 // Returns and calls callback when saved.
 UserSchema.methods.updateReset = (function (callback) {
-  this.resetToken = escape(bcrypt.genSaltSync(5));
+  this.resetToken = crypto.randomBytes(10).toString('hex');
   this.resetTime = (new Date());
   this.save(function () {
     return callback();
@@ -86,7 +82,7 @@ UserSchema.statics.register = (function (name, email, password, callback) {
     name: name,
     email: email,
     password: password,
-    resetToken: escape(bcrypt.genSaltSync(5)),
+    resetToken: crypto.randomBytes(10).toString('hex'),
     resetTime: (new Date())
   });
   user.save(function (err) {
@@ -113,6 +109,33 @@ UserSchema.statics.authenticate = (function (email, password, callback) {
       if (err || !passwordCorrect) return callback(false);
       return callback(user);
     });
+  });
+});
+
+// Find by Id.
+//
+// id - Looks up a user by a given id.
+// callback
+//
+// Returns callback with either the found and verified user or false.
+UserSchema.statics.findById = (function (id, callback) {
+  this.findOne({ _id: id }, function (err, user) {
+    if (err || !user) return callback(false);
+    return callback(user);
+  });
+});
+
+// Find by a users name and email.
+//
+// name - Looks up a user by a given name.
+// email - And by their given email just for a little more security.
+// callback
+//
+// Returns callback with either the found and verified user or false.
+UserSchema.statics.findByReminder = (function (name, email, callback) {
+  this.findOne({ name: name, email: email }, function (err, user) {
+    if (err || !user) return callback(false);
+    return callback(user);
   });
 });
 
