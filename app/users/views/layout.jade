@@ -6,3 +6,12 @@ html
     if typeof(flash) !== 'undefined'
       div= flash
     block mainContent
+    hr
+    |  <a href="/">Home</a>
+    |  <a href="/login">Login</a>
+    if typeof(currentUser) !== 'undefined'
+      |  <a href="/logout">Logout</a>
+      |  <a href="/members">Members</a>
+      |  <a href="/members/account">Account</a>
+    else
+      |  <a href="/reminder">Reminder</a>

@@ -2,12 +2,11 @@ extends layout
 
 block mainContent
   h2 Password Reminder
-  p
-    Send yourself an email to reset your password.
+  p Send yourself an email to reset your password.
 
   form(action='/reminder', method='post', 'data-autosave'='true')
     fieldset
       label
         span Email
-        input(name='user[email]', value='', placeholder='me@example.com', type='text')
+        input(name='email', value='', placeholder='me@example.com', type='text')
       input(type='submit', name='submit', value='Reset Password')
