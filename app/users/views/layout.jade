@@ -8,10 +8,11 @@ html
     block mainContent
     hr
     |  <a href="/">Home</a>
-    |  <a href="/login">Login</a>
     if typeof(currentUser) !== 'undefined'
-      |  <a href="/logout">Logout</a>
       |  <a href="/members">Members</a>
       |  <a href="/members/account">Account</a>
+      |  <a href="/logout">Logout</a>
     else
+      |  <a href="/login">Login</a>
+      |  <a href="/signup">Sign Up</a>
       |  <a href="/reminder">Reminder</a>

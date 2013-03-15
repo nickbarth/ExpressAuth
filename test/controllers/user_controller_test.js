@@ -14,7 +14,7 @@ describe('User Controller', function () {
   //
   // Returns an nothing if successful, otherwise an error is thrown.
   before(function (done) {
-    request(app).post('/join').send({ name: 'john doe', email: 'john.doe@example.com', password: 'password' }).end(function (err, res) {
+    request(app).post('/signup').send({ name: 'john doe', email: 'john.doe@example.com', password: 'password' }).end(function (err, res) {
       if (err) return done(err);
       User.findOne({ email: 'john.doe@example.com' }, function (err, user) {
         if (err) return done(err);
@@ -45,15 +45,15 @@ describe('User Controller', function () {
     });
   }); // End GET /
 
-  describe('GET /join', function () {
-    it('displays the join page', function (done) {
-      request(app).get('/join').expect(200).end(function (err, res) {
+  describe('GET /signup', function () {
+    it('displays the sign up page', function (done) {
+      request(app).get('/signup').expect(200).end(function (err, res) {
         if (err) return done(err);
-        res.text.should.include('<h2>Join</h2>');
+        res.text.should.include('<h2>Sign Up</h2>');
         done();
       });
     });
-  }); // End GET /join
+  }); // End GET /signup
 
   describe('GET /login', function () {
     it('displays the login page', function (done) {
@@ -137,9 +137,9 @@ describe('User Controller', function () {
     });
   }); // End GET /reset/:email/:resetToken
 
-  describe('POST /join', function () {
+  describe('POST /signup', function () {
     it('redirects to members page on success', function (done) {
-      var req = request(app).post('/join').send({ name: 'jane doe', email: 'jane.doe@example.com', password: 'password' });
+      var req = request(app).post('/signup').send({ name: 'jane doe', email: 'jane.doe@example.com', password: 'password' });
 
       req.end(function (err, res) {
         if (err) return done(err);
@@ -149,7 +149,7 @@ describe('User Controller', function () {
     });
 
     it('displays error on invalid entry', function (done) {
-      var req = request(app).post('/join').send({ name: 'john doe', email: 'john.doe@example.com', password: 'password' });
+      var req = request(app).post('/signup').send({ name: 'john doe', email: 'john.doe@example.com', password: 'password' });
 
       req.end(function (err, res) {
         if (err) return done(err);
@@ -157,7 +157,7 @@ describe('User Controller', function () {
         done();
       });
     });
-  }); // End POST /join
+  }); // End POST /signup
 
   describe('POST /login', function () {
     it('redirects to members page on success', function (done) {

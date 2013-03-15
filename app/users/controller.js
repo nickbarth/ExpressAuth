@@ -23,9 +23,9 @@ module.exports = UserAPI = {
     res.render('index');
   },
 
-  // get '/join'
-  getJoin: function (req, res) {
-    res.render('join');
+  // get '/signup'
+  getSignUp: function (req, res) {
+    res.render('signup');
   },
 
   // get '/login'
@@ -67,8 +67,8 @@ module.exports = UserAPI = {
     });
   },
 
-  // post '/join'
-  postJoin: function (req, res) {
+  // post '/signup'
+  postSignUp: function (req, res) {
     User.register(req.body.name, req.body.email, req.body.password, function (user) {
       if (user) {
         req.session.userId = user._id;
