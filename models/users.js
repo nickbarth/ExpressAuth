@@ -61,7 +61,9 @@ UserSchema.methods.updateReset = (function (callback) {
 UserSchema.methods.updateSettings = (function (name, email, password, callback) {
   this.name = name || this.name;
   this.email = email || this.email;
-  this.password = password || this.password;
+  if (password) {
+    this.password = password;
+  }
   this.save(function (err) {
     return callback();
   });
