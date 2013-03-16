@@ -88,7 +88,7 @@ describe('User Controller', function () {
     });
 
     it('displays an error if not logged in', function (done) {
-      request(app).get('/members').expect(200).end(function (err, res) {
+      request(app).get('/members').expect(403).end(function (err, res) {
         if (err) return done(err);
         res.text.should.include('Please login to access this page.');
         done();
@@ -109,7 +109,7 @@ describe('User Controller', function () {
     });
 
     it('displays an error if not logged in', function (done) {
-      request(app).get('/members/account').expect(200).end(function (err, res) {
+      request(app).get('/members/account').expect(403).end(function (err, res) {
         if (err) return done(err);
         res.text.should.include('Please login to access this page.');
         done();

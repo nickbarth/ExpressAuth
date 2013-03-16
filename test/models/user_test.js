@@ -22,8 +22,8 @@ describe('User', function () {
   describe('static method', function () {
     describe('#register', function () {
       it('registers a new user', function (done){
-        User.register('john doe', 'test2@test.com', 'password', function(user) {
-          user.email.should.equal('test2@test.com');
+        User.register('jane doe', 'jane.doe@example.com', 'password', function(user) {
+          user.email.should.equal('jane.doe@example.com');
           done();
         });
       });
