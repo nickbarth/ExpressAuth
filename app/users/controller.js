@@ -2,12 +2,21 @@ var User = require('../../models/users');
 
 module.exports = UserAPI = {
   helpers: {
-    // Check user is authenticated
+    // Display flash notices.
+    //
+    // Sets the local notice variable if the session is set.
+    checkNotice: (function (req, res, next) {
+      res.locals.notice = req.session.notice;
+      req.session.notice = false;
+      next();
+    }),
+
+    // Check user is authenticated.
     //
     // Returns an error if not signed in, otherwise it sets the currentUser.
     checkAuth: (function (req, res, next) {
       if (!req.session.userId) {
-        res.send('Please login to access this page.');
+        res.send(403, 'Please login to access this page.');
       } else {
         User.findById(req.session.userId, function (user) {
           if (!user) throw new Error('Invalid User Id.');
@@ -35,8 +44,8 @@ module.exports = UserAPI = {
 
   // get '/logout'
   getLogout: function (req, res) {
-    req.session.destroy();
-    res.locals.flash = 'Successfully logged out.';
+    req.session.userId = undefined;
+    req.session.notice = 'Successfully logged out.';
     res.redirect('/');
   },
 
@@ -72,7 +81,7 @@ module.exports = UserAPI = {
     User.register(req.body.name, req.body.email, req.body.password, function (user) {
       if (user) {
         req.session.userId = user._id;
-        res.locals.flash = 'Thank you for becoming a member.';
+        req.session.notice = 'Thank you for becoming a member.';
         res.redirect('/members');
       } else {
         res.send('Invalid email or password.');
@@ -85,7 +94,7 @@ module.exports = UserAPI = {
     User.authenticate(req.body.email, req.body.password, function (user) {
       if (user) {
         req.session.userId = user._id;
-        res.locals.flash = 'Successfully logged in.';
+        req.session.notice = 'Successfully logged in.';
         res.redirect('/members');
       } else {
         res.send('Invalid email or password.');
@@ -97,7 +106,7 @@ module.exports = UserAPI = {
   postMembersAccount: function (req, res) {
     User.findById(req.session.userId, function (currentUser) {
       currentUser.updateSettings(req.body.name, req.body.email, req.body.password, function () {
-        res.locals.flash = 'Your settings have been updated.';
+        res.locals.notice = 'Your settings have been updated.';
         res.locals.currentUser = currentUser;
         res.render('account');
       });
@@ -111,7 +120,7 @@ module.exports = UserAPI = {
         user.updateReset();
         // Email User
       }
-      res.locals.flash = 'Your password reset email has been sent.';
+      res.locals.notice = 'Your password reset email has been sent.';
       res.render('reminder');
     });
   },
@@ -120,7 +129,7 @@ module.exports = UserAPI = {
   postReset: function (req, res) {
     User.findById(req.session.userId, function (currentUser) {
       currentUser.updateSettings('', '', req.body.password, function (user) {
-        res.locals.flash = 'Password successfully updated.';
+        req.session.notice = 'Password successfully updated.';
         res.redirect('/account');
       });
     });

@@ -3,8 +3,8 @@ html
   head
     title ExpressAuth
   body
-    if typeof(flash) !== 'undefined'
-      div= flash
+    if notice
+      div= notice
     block mainContent
     hr
     |  <a href="/">Home</a>

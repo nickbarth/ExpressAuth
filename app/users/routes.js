@@ -1,6 +1,9 @@
 var api = require('./controller');
 
 module.exports = UserRoutes = (function (app) {
+  /* Helpers */
+  app.all('*', api.helpers.checkNotice);
+
   /* Routes */
   app.get('/', api.home);
   app.get('/signup', api.getSignUp);
