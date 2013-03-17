@@ -41,4 +41,4 @@ Here is how to use it.
 
 ### License
 
-WTFPL &copy; 2012 Nick Barth
+WTFPL &copy; 2013 Nick Barth
