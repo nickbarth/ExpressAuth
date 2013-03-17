@@ -12,7 +12,7 @@ A modular implementation of authentication in a Node.js Express application.
   </tr>
   <tr>
     <td>Testing</td>
-    <td><a href="http://visionmedia.github.com/mocha/">Mocha</a></td>
+    <td><a href="http://visionmedia.github.com/mocha/">Mocha</a></td> / <a href="https://github.com/visionmedia/should.js/">Should.js</a>
   </tr>
   <tr>
     <td>Integration Tests</td>
