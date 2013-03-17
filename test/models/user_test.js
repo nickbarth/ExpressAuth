@@ -86,9 +86,9 @@ describe('User', function () {
   describe('instance method', function () {
     describe('#updateSettings', function () {
       it('returns true with successful update', function (done){
-        currentUser.updateSettings('new name', 'new email', 'new password', function () {
+        currentUser.updateSettings('new name', 'new.email@example.com', 'new password', function () {
           currentUser.name.should.equal('new name');
-          currentUser.email.should.equal('new email');
+          currentUser.email.should.equal('new.email@example.com');
           currentUser.verifyPassword('new password', function (err, passwordCorrect) {
             passwordCorrect.should.equal(true);
             done();
