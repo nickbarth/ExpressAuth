@@ -2,6 +2,12 @@ var User = require('../../models/users');
 
 module.exports = UserAPI = {
   helpers: {
+
+    setCSRF: (function (req, res, next) {
+      res.locals.csrf = req.session._csrf;
+      next();
+    }),
+
     // Display flash notices.
     //
     // Sets the local notice variable if the session is set.
@@ -15,14 +21,15 @@ module.exports = UserAPI = {
     //
     // Sets the current user variable for views.
     setCurrentUser: (function (req, res, next) {
-      res.locals.currentUser = false;
       if (req.session.userId) {
         User.findById(req.session.userId, function (user) {
-          if (!user) throw new Error('Invalid User Id.');
           res.locals.currentUser = user;
+          next();
         });
+      } else {
+        res.locals.currentUser = false;
+        next();
       }
-      next();
     }),
 
     // Check user is authenticated.

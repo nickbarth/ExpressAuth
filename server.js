@@ -8,6 +8,9 @@ app.configure(function () {
   app.use(express.cookieParser());
   app.use(express.methodOverride());
   app.use(express.session({ secret: 'SECRET' }));
+  if (app.get('env') !== 'test') {
+    app.use(express.csrf());
+  }
   app.use(app.router);
 });
 

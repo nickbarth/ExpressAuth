@@ -12,4 +12,5 @@ block mainContent
       label
         span Password
         input(name='password', value='', placeholder='******', type='password')
+      input(type='hidden', name='_csrf', value=csrf)
       input(type='submit', name='submit', value='Login')

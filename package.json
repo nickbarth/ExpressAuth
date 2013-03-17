@@ -14,7 +14,7 @@
     "newrelic": "~0.9.19"
   },
   "scripts": {
-    "test": "mocha test/ --recursive"
+    "test": "NODE_ENV=test mocha test/ --recursive"
   },
   "devDependencies": {
     "mocha": "~1.8.2",

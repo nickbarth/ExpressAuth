@@ -1,1 +1,1 @@
-web: node index.js
+web: NODE_ENV=productio node index.js

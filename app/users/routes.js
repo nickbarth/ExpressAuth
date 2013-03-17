@@ -3,6 +3,7 @@ var api = require('./controller');
 module.exports = UserRoutes = (function (app) {
   /* Helpers */
   app.all('*', api.helpers.checkNotice);
+  app.all('*', api.helpers.setCSRF);
   app.all('*', api.helpers.setCurrentUser);
 
   /* Routes */
