@@ -1,4 +1,5 @@
-var mongoose = require('mongoose'),
+var newrelic = require('newrelic'),
+    mongoose = require('mongoose'),
     app = require('./server'),
     mongoUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/expressAuth',
     port = process.env.PORT || 5000;
