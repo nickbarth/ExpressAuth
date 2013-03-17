@@ -1,5 +1,7 @@
 # Express Auth
 
+[![Dependency Status](https://gemnasium.com/nickbarth/ExpressAuth.png)](https://gemnasium.com/nickbarth/ExpressAuth)
+
 A modular implementation of authentication in a Node.js Express application.
 
 <table>
