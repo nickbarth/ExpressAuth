@@ -5,7 +5,9 @@ var request = require('supertest'),
     User = require('../../models/users');
     app = require('../../server');
 
-mongoose.connect('mongodb://localhost/tddauth-test', {db: { safe: true }});
+if (!mongoose.connections[0]._readyState) {
+  mongoose.connect('mongodb://localhost/tddauth-test', {db: { safe: true }});
+}
 
 describe('User Controller', function () {
   var currentUser = null;
