@@ -8,7 +8,6 @@ var mongoose = require('mongoose'),
 UserSchema = mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, unique: true, match: /@/, required: true },
-  salt: { type: String, required: true },
   hash: { type: String, required: true },
   resetToken: { type: String, required: true },
   resetTime: { type: Date, required: true }
@@ -20,9 +19,9 @@ UserSchema = mongoose.Schema({
 UserSchema.virtual('password').get(function (password) {
   return this._password;
 }).set(function (password) {
+  var salt = bcrypt.genSaltSync(10);
   this._password = password;
-  this.salt = bcrypt.genSaltSync(10);
-  this.hash = bcrypt.hashSync(password, this.salt);
+  this.hash = bcrypt.hashSync(password, salt);
 });
 
 /* User Instance Methods */
