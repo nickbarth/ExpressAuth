@@ -15,9 +15,13 @@
     "superagent": "~0.12.4"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha test/ --recursive"
   },
   "repository": "",
   "author": "Nick Barth",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "~1.8.2",
+    "should": "~1.2.2"
+  }
 }
