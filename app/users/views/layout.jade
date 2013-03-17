@@ -8,7 +8,7 @@ html
     block mainContent
     hr
     |  <a href="/">Home</a>
-    if typeof(currentUser) !== 'undefined'
+    if currentUser
       |  <a href="/members">Members</a>
       |  <a href="/members/account">Account</a>
       |  <a href="/logout">Logout</a>

@@ -11,18 +11,28 @@ module.exports = UserAPI = {
       next();
     }),
 
+    // Sets current user.
+    //
+    // Sets the current user variable for views.
+    setCurrentUser: (function (req, res, next) {
+      res.locals.currentUser = false;
+      if (req.session.userId) {
+        User.findById(req.session.userId, function (user) {
+          if (!user) throw new Error('Invalid User Id.');
+          res.locals.currentUser = user;
+        });
+      }
+      next();
+    }),
+
     // Check user is authenticated.
     //
-    // Returns an error if not signed in, otherwise it sets the currentUser.
+    // Returns an error if not signed in.
     checkAuth: (function (req, res, next) {
       if (!req.session.userId) {
         res.send(403, 'Please login to access this page.');
       } else {
-        User.findById(req.session.userId, function (user) {
-          if (!user) throw new Error('Invalid User Id.');
-          res.locals.currentUser = user;
-          next();
-        });
+        next();
       }
     })
   },
