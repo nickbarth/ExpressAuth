@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 /* User Schema */
 UserSchema = mongoose.Schema({
   name: { type: String, required: true },
-  email: { type: String, unique: true },
+  email: { type: String, unique: true, match: /@/, required: true },
   salt: { type: String, required: true },
   hash: { type: String, required: true },
   resetToken: { type: String, required: true },

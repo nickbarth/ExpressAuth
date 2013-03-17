@@ -31,6 +31,13 @@ describe('User', function () {
         });
       });
 
+      it('fails on invalid emails', function (done){
+        User.register('john doe', 'john.doeexample.com', 'password', function(user) {
+          user.should.equal(false);
+          done();
+        });
+      });
+
       it('fails on nonunique emails', function (done){
         User.register('john doe', 'john.doe@example.com', 'password', function(user) {
           user.should.equal(false);
