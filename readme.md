@@ -1,5 +1,6 @@
 # Express Auth
 
+[![Build Status](https://secure.travis-ci.org/nickbarth/ExpressAuth.png?branch=master)](https://travis-ci.org/nickbarth/ExpressAuth)
 [![Dependency Status](https://gemnasium.com/nickbarth/ExpressAuth.png)](https://gemnasium.com/nickbarth/ExpressAuth)
 
 A modular implementation of authentication in a Node.js Express application.
