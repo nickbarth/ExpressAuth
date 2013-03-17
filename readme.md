@@ -37,6 +37,7 @@ Here is how to use it.
 ### And run it!
 
     node index.js
+    Server listening on port 5000
 
 ### License
 

@@ -7,5 +7,5 @@ var newrelic = require('newrelic'),
 mongoose.connect(mongoUri, {db: { safe: true }});
 
 app.listen(port, function () {
-  console.log('Server listening on ' + port);
+  console.log('Server listening on port ' + port);
 });
