@@ -1,11 +1,11 @@
 {
-  "name": "NodeAuth",
-  "version": "0.0.0",
-  "description": "Demo application for user authentication in Node.",
-  "main": "app.js",
-  "directories": {
-    "test": "tests"
-  },
+  "name": "ExpressAuth",
+  "version": "1.0.0",
+  "description": "A modular implementation of authentication in a Node.js Express application.",
+  "main": "index.js",
+  "repository": "",
+  "author": "Nick Barth",
+  "license": "MIT",
   "dependencies": {
     "mongoose": "~3.5.7",
     "bcrypt": "~0.7.4",
@@ -15,13 +15,14 @@
   "scripts": {
     "test": "mocha test/ --recursive"
   },
-  "repository": "",
-  "author": "Nick Barth",
-  "license": "MIT",
   "devDependencies": {
     "mocha": "~1.8.2",
     "should": "~1.2.2",
     "supertest": "~0.5.1",
     "superagent": "~0.13.0"
+  },
+  "engines": {
+    "node": "0.10.x",
+    "npm": "1.1.x"
   }
 }
