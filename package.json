@@ -22,6 +22,6 @@
     "mocha": "~1.8.2",
     "should": "~1.2.2",
     "supertest": "~0.5.1",
-    "superagent": "~0.12.4"
+    "superagent": "~0.13.0"
   }
 }
