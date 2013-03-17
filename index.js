@@ -1,6 +1,10 @@
 var mongoose = require('mongoose'),
-    app = require('./server');
+    app = require('./server'),
+    mongoUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/expressAuth',
+    port = process.env.PORT || 5000;
 
-mongoose.connect('mongodb://localhost/tddauth', {db: { safe: true }});
+mongoose.connect(mongoUri, {db: { safe: true }});
 
-app.listen(3000);
+app.listen(port, function () {
+  console.log('Server listening on ' + port);
+});

@@ -3,10 +3,11 @@ var request = require('supertest'),
     agent = superagent.agent(),
     mongoose = require('mongoose'),
     User = require('../../models/users');
-    app = require('../../server');
+    app = require('../../server'),
+    mongoUri = process.env.MONGOLAB_URI || process.env.MONGOHQ_URL || 'mongodb://localhost/expressAuth-test';
 
 if (!mongoose.connections[0]._readyState) {
-  mongoose.connect('mongodb://localhost/tddauth-test', {db: { safe: true }});
+  mongoose.connect(mongoUri, {db: { safe: true }});
 }
 
 describe('User Controller', function () {
