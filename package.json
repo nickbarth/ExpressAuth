@@ -7,7 +7,7 @@
   "author": "Nick Barth",
   "license": "MIT",
   "dependencies": {
-    "mongoose": "~3.5.7",
+    "mongoose": "~3.6.0",
     "bcrypt": "~0.7.4",
     "express": "~3.1.0",
     "jade": "~0.28.2",
