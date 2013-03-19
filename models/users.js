@@ -95,6 +95,17 @@ UserSchema.statics.register = (function (name, email, password, callback) {
   });
 });
 
+// Fakes a hash compare to prevent timing attacks
+//
+// password - Password to verify user against.
+// randomHash - Takes a hash to compare against.
+//
+// Returns the callback with false after the comparison has completed.
+UserSchema.statics.fauxVerifyPassword = (function (password, randomHash, callback) {
+  bcrypt.compareSync(password, randomHash);
+  return callback(false);
+});
+
 // Authenticates a user.
 //
 // email - Looks up a user by a given email.
@@ -103,8 +114,12 @@ UserSchema.statics.register = (function (name, email, password, callback) {
 //
 // Returns callback with either the found and verified user or false.
 UserSchema.statics.authenticate = (function (email, password, callback) {
+  var randomHash = bcrypt.hashSync(crypto.randomBytes(10).toString('hex'), bcrypt.genSaltSync(10));
+
   this.findOne({ email: email }, function (err, user) {
-    if (err || !user) return callback(false);
+    if (err || !user) {
+      return User.fauxVerifyPassword(password, randomHash, callback);
+    }
 
     user.verifyPassword(password, function (err, passwordCorrect) {
       if (err || !passwordCorrect) return callback(false);
