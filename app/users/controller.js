@@ -2,7 +2,9 @@ var User = require('../../models/users');
 
 module.exports = UserAPI = {
   helpers: {
-
+    // Sets CSRF token.
+    //
+    // Sets the csrf token so it can be used for CSRF form protection.
     setCSRF: (function (req, res, next) {
       res.locals.csrf = req.session._csrf;
       next();

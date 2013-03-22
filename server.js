@@ -11,9 +11,9 @@ app.configure(function () {
   if (app.get('env') !== 'test') {
     app.use(express.csrf());
   }
-  app.use(app.router);
 });
 
 require('./app/users/routes')(app);
+app.use(app.router);
 
 module.exports = app;

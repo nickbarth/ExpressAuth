@@ -2,9 +2,9 @@ var api = require('./controller');
 
 module.exports = UserRoutes = (function (app) {
   /* Helpers */
-  app.all('*', api.helpers.checkNotice);
-  app.all('*', api.helpers.setCSRF);
-  app.all('*', api.helpers.setCurrentUser);
+  app.use(api.helpers.checkNotice);
+  app.use(api.helpers.setCSRF);
+  app.use(api.helpers.setCurrentUser);
 
   /* Routes */
   app.get('/', api.home);
