@@ -132,7 +132,7 @@ describe('User Controller', function () {
 
   describe('GET /reset/:email/:resetToken', function () {
     it('displays the reset page', function (done) {
-      request(app).get('/reset/'+currentUser.email+'/'+currentUser.resetToken).expect(200).end(function (err, res) {
+      request(app).get('/reset/'+encodeURIComponent(currentUser.email)+'/'+currentUser.resetToken).expect(200).end(function (err, res) {
         if (err) return done(err);
         res.text.should.include('<h2>Reset Password</h2>');
         done();
@@ -221,4 +221,22 @@ describe('User Controller', function () {
       });
     });
   }); // End POST /reset
+
+
+  describe('MIDDLEWARE checkNotifications', function () {
+    it('displays session notifications when set', function (done) {
+      request(app).get('/logout').expect(302).end(function (err, res) {
+        if (err) return done(err);
+        res.headers.location.should.equal('/');
+        agent.saveCookies(res);
+
+        var req = request(app).get('/');
+        agent.attachCookies(req);
+        req.expect(200).end(function (err, res) {
+          res.text.should.include('Successfully logged out.');
+          done();
+        });
+      });
+    });
+  });
 }); // End User Controller
