@@ -1,4 +1,5 @@
 var User = require('../../models/users');
+    Mailer = require('../../models/extensions/mailer');
 
 module.exports = UserAPI = {
   helpers: {
@@ -99,6 +100,7 @@ module.exports = UserAPI = {
   postSignUp: function (req, res) {
     User.register(req.body.name, req.body.email, req.body.password, function (user) {
       if (user) {
+        Mailer(user).sendWelcomeMessage();
         req.session.userId = user._id;
         req.session.notice = 'Thank you for becoming a member.';
         res.redirect('/members');
@@ -137,7 +139,7 @@ module.exports = UserAPI = {
     User.findByReminder(req.body.name, req.body.email, function (user) {
       if (user) {
         user.updateReset();
-        // Email User
+        Mailer(user).sendPasswordReset();
       }
       res.locals.notice = 'Your password reset email has been sent.';
       res.render('reminder');
