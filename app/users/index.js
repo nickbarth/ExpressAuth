@@ -1,6 +1,11 @@
-var api = require('./controller');
+var express = require('express'),
+    api = require('./controller'),
+    app = module.exports = express();
 
-module.exports = UserRoutes = (function (app) {
+app.configure(function () {
+  /* Config */
+  app.set('views', __dirname + '/views');
+
   /* Helpers */
   app.use(api.helpers.checkNotice);
   app.use(api.helpers.setCSRF);
