@@ -9,14 +9,15 @@ body
         .navbar-inner
           a.brand(href='/') ExpressAuth
           ul.nav
+            block navSelect
             if currentUser
-              li: a(href='/members') Members
-              li: a(href='/members/account') Account
-              li: a(href='/logout') Logout
+              li(class=nav.members): a(href='/members') Members
+              li(class=nav.account): a(href='/members/account') Account
+              li(class=nav.logout): a(href='/logout') Logout
             else
-              li: a(href='/login') Login
-              li: a(href='/signup') Sign Up
-              li: a(href='/reminder') Reminder
+              li(class=nav.login): a(href='/login') Login
+              li(class=nav.signup): a(href='/signup') Sign Up
+              li(class=nav.reminder): a(href='/reminder') Reminder
       if notice
         .alert.alert-info= notice
       block mainContent
