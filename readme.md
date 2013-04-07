@@ -1,4 +1,4 @@
-# Express Auth
+# [Express Auth](http://expressauth.herokuapp.com)
 
 [![Build Status](https://secure.travis-ci.org/nickbarth/ExpressAuth.png?branch=master)](https://travis-ci.org/nickbarth/ExpressAuth)
 [![Dependency Status](https://gemnasium.com/nickbarth/ExpressAuth.png)](https://gemnasium.com/nickbarth/ExpressAuth)
@@ -41,4 +41,4 @@ Here is how to use it.
 
 ### License
 
-WTFPL &copy; 2013 Nick Barth
+MIT &copy; 2013 Nick Barth
