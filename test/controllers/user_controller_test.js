@@ -42,7 +42,7 @@ describe('User Controller', function () {
     it('displays the home page', function (done) {
       request(app).get('/').expect(200).end(function (err, res) {
         if (err) return done(err);
-        res.text.should.include('<h2>Home</h2>');
+        res.text.should.include('<h1>Express Auth</h1>');
         done();
       });
     });
