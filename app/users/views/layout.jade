@@ -2,17 +2,21 @@
 html
   head
     title ExpressAuth
-  body
-    if notice
-      div= notice
-    block mainContent
-    hr
-    |  <a href="/">Home</a>
-    if currentUser
-      |  <a href="/members">Members</a>
-      |  <a href="/members/account">Account</a>
-      |  <a href="/logout">Logout</a>
-    else
-      |  <a href="/login">Login</a>
-      |  <a href="/signup">Sign Up</a>
-      |  <a href="/reminder">Reminder</a>
+    link(href='http://twitter.github.io/bootstrap/assets/css/bootstrap.css', rel='stylesheet')
+body
+    .container
+      .navbar
+        .navbar-inner
+          a.brand(href='/') ExpressAuth
+          ul.nav
+            if currentUser
+              li: a(href='/members') Members
+              li: a(href='/members/account') Account
+              li: a(href='/logout') Logout
+            else
+              li: a(href='/login') Login
+              li: a(href='/signup') Sign Up
+              li: a(href='/reminder') Reminder
+      if notice
+        .alert.alert-info= notice
+      block mainContent

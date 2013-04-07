@@ -2,12 +2,12 @@ extends layout
 
 block mainContent
   h2 Reset Password
-  p Set a new password.
 
   form(action='/reset', method='post', 'data-autosave'='true')
     fieldset
-      label
-        span Password
-        input(name='password', value='', placeholder='******', type='password')
+      legend Set a new password.
+      label Password
+      input(name='password', value='', placeholder='******', type='password')
       input(type='hidden', name='_csrf', value=csrf)
-      input(type='submit', name='submit', value='Set Password')
+      label
+        button.btn.btn-primary(type='submit') Set Password
