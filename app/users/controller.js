@@ -91,7 +91,8 @@ module.exports = UserAPI = {
         req.session.userId = user._id;
         res.render('reset');
       } else {
-        res.send('Invalid email or reset token.');
+        req.session.notice = 'Invalid email or reset token.';
+        res.redirect('/');
       }
     });
   },
@@ -105,7 +106,8 @@ module.exports = UserAPI = {
         req.session.notice = 'Thank you for becoming a member.';
         res.redirect('/members');
       } else {
-        res.send('Invalid email or password.');
+        req.session.notice = 'Invalid email or password.';
+        res.redirect('/signup');
       }
     });
   },
@@ -118,7 +120,8 @@ module.exports = UserAPI = {
         req.session.notice = 'Successfully logged in.';
         res.redirect('/members');
       } else {
-        res.send('Invalid email or password.');
+        req.session.notice = 'Invalid email or password.';
+        res.redirect('/login');
       }
     });
   },

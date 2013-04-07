@@ -1,6 +1,7 @@
 var request = require('supertest'),
     superagent = require('superagent'),
     agent = superagent.agent(),
+    login = superagent.agent(),
     mongoose = require('mongoose'),
     User = require('../../models/users');
     app = require('../../server'),
@@ -21,7 +22,7 @@ describe('User Controller', function () {
       if (err) return done(err);
       User.findOne({ email: 'john.doe@example.com' }, function (err, user) {
         if (err) return done(err);
-        agent.saveCookies(res);
+        login.saveCookies(res);
         currentUser = user;
         done();
       });
@@ -73,7 +74,14 @@ describe('User Controller', function () {
       request(app).get('/logout').expect(302).end(function (err, res) {
         if (err) return done(err);
         res.headers.location.should.equal('/');
-        done();
+        agent.saveCookies(res);
+
+        var req = request(app).get('/');
+        agent.attachCookies(req);
+        req.expect(200).end(function (err, res) {
+          res.text.should.include('Successfully logged out.');
+          done();
+        });
       });
     });
   }); // End GET /logout
@@ -81,7 +89,7 @@ describe('User Controller', function () {
   describe('GET /members', function () {
     it('displays the members page', function (done) {
       var req = request(app).get('/members');
-      agent.attachCookies(req);
+      login.attachCookies(req);
 
       req.expect(200).end(function (err, res) {
         if (err) return done(err);
@@ -102,7 +110,7 @@ describe('User Controller', function () {
   describe('GET /members/account', function () {
     it('displays the account page', function (done) {
       var req = request(app).get('/members/account');
-      agent.attachCookies(req);
+      login.attachCookies(req);
 
       req.expect(200).end(function (err, res) {
         if (err) return done(err);
@@ -147,7 +155,14 @@ describe('User Controller', function () {
       req.end(function (err, res) {
         if (err) return done(err);
         res.headers.location.should.equal('/members');
-        done();
+        agent.saveCookies(res);
+
+        req = request(app).get('/members');
+        agent.attachCookies(req);
+        req.expect(200).end(function (err, res) {
+          res.text.should.include('Thank you for becoming a member.');
+          done();
+        });
       });
     });
 
@@ -156,8 +171,15 @@ describe('User Controller', function () {
 
       req.end(function (err, res) {
         if (err) return done(err);
-        res.text.should.include('Invalid email or password.');
-        done();
+        res.headers.location.should.equal('/signup');
+        agent.saveCookies(res);
+
+        req = request(app).get('/signup');
+        agent.attachCookies(req);
+        req.expect(200).end(function (err, res) {
+          res.text.should.include('Invalid email or password.');
+          done();
+        });
       });
     });
   }); // End POST /signup
@@ -169,7 +191,14 @@ describe('User Controller', function () {
       req.end(function (err, res) {
         if (err) return done(err);
         res.headers.location.should.equal('/members');
-        done();
+        agent.saveCookies(res);
+
+        req = request(app).get('/members');
+        agent.attachCookies(req);
+        req.expect(200).end(function (err, res) {
+          res.text.should.include('Successfully logged in.');
+          done();
+        });
       });
     });
 
@@ -178,8 +207,15 @@ describe('User Controller', function () {
 
       req.end(function (err, res) {
         if (err) return done(err);
-        res.text.should.include('Invalid email or password.');
-        done();
+        res.headers.location.should.equal('/login');
+        agent.saveCookies(res);
+
+        req = request(app).get('/login');
+        agent.attachCookies(req);
+        req.expect(200).end(function (err, res) {
+          res.text.should.include('Invalid email or password.');
+          done();
+        });
       });
     });
   }); // End POST /login
@@ -187,7 +223,7 @@ describe('User Controller', function () {
   describe('POST /members/account', function () {
     it('updates user information', function (done) {
       var req = request(app).post('/members/account');
-      agent.attachCookies(req);
+      login.attachCookies(req);
       req.send({ email: 'jim.doe@example.com', password: 'password' });
 
       req.end(function (err, res) {
@@ -212,7 +248,7 @@ describe('User Controller', function () {
   describe('POST /reset', function () {
     it('displays the reset page', function (done) {
       var req = request(app).post('/reset');
-      agent.attachCookies(req);
+      login.attachCookies(req);
 
       req.send({ password: 'newpassword' }).end(function (err, res) {
         if (err) return done(err);
@@ -221,22 +257,4 @@ describe('User Controller', function () {
       });
     });
   }); // End POST /reset
-
-
-  describe('MIDDLEWARE checkNotifications', function () {
-    it('displays session notifications when set', function (done) {
-      request(app).get('/logout').expect(302).end(function (err, res) {
-        if (err) return done(err);
-        res.headers.location.should.equal('/');
-        agent.saveCookies(res);
-
-        var req = request(app).get('/');
-        agent.attachCookies(req);
-        req.expect(200).end(function (err, res) {
-          res.text.should.include('Successfully logged out.');
-          done();
-        });
-      });
-    });
-  });
 }); // End User Controller
