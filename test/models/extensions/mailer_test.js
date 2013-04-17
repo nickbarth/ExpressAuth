@@ -13,7 +13,7 @@ TestTransport =  function () {
     this.subject = emailHash.subject;
     this.html = emailHash.html;
     this.generateTextFromHTML = emailHash.generateTextFromHTML;
-  })
+  });
 };
 
 describe('Mailer', function () {
