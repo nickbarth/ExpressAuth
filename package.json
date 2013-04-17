@@ -9,8 +9,8 @@
   "dependencies": {
     "mongoose": "~3.6.0",
     "bcrypt": "~0.7.4",
-    "express": "~3.1.0",
-    "jade": "~0.28.2",
+    "express": "~3.2.0",
+    "jade": "~0.29.0",
     "newrelic": "~0.9.19",
     "nodemailer": "~0.4.1"
   },
@@ -20,7 +20,7 @@
   "devDependencies": {
     "mocha": "~1.9.0",
     "should": "~1.2.2",
-    "supertest": "~0.5.1",
+    "supertest": "~0.6.0",
     "superagent": "~0.14.0"
   },
   "engines": {
