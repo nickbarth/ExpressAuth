@@ -14,9 +14,7 @@ UserSchema = mongoose.Schema({
 });
 
 /* Properties */
-
-// Password Property
-UserSchema.virtual('password').get(function (password) {
+UserSchema.virtual('password').get(function () {
   return this._password;
 }).set(function (password) {
   var salt = bcrypt.genSaltSync(10);
